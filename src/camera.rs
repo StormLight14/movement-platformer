@@ -9,8 +9,8 @@ use crate::{
     VIEW_HEIGHT, VIEW_WIDTH,
 };
 
-const CAMERA_MAX_SPEED: f32 = MAX_SPEED;
-const CAMERA_ACCELERATION: f32 = ACCELERATION * 0.9;
+//const CAMERA_MAX_SPEED: f32 = MAX_SPEED;
+//const CAMERA_ACCELERATION: f32 = ACCELERATION * 0.9;
 
 pub struct CameraPlugin;
 

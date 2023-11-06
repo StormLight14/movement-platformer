@@ -2,9 +2,11 @@ use bevy::prelude::*;
 use bevy::sprite::Anchor;
 use bevy_rapier2d::prelude::*;
 
+use crate::{GRAVITY_ACCELERATION, MAX_GRAVITY_SPEED};
+
 pub const ACCELERATION: f32 = 350.0;
 pub const MAX_SPEED: f32 = 200.0;
-const JUMP_STRENGTH: f32 = 150.0;
+const JUMP_STRENGTH: f32 = 100.0;
 
 pub struct PlayerPlugin;
 
@@ -39,14 +41,18 @@ fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..default()
         },
         Player {
-            jumps: 2,
-            jumps_left: 2,
+            jumps: 1000,
+            jumps_left: 1000,
         },
         Name::from("Player"),
         Velocity::zero(),
-        RigidBody::Dynamic,
+        RigidBody::KinematicVelocityBased,
         LockedAxes::ROTATION_LOCKED,
-        KinematicCharacterController::default(),
+        KinematicCharacterController {
+            up: Vec2::new(0.0, 1.0),
+            ..default()
+        },
+        KinematicCharacterControllerOutput::default(),
         Friction::new(0.1),
         Collider::cuboid(8.0, 8.0),
     ));
@@ -58,7 +64,7 @@ fn player_movement(
             &mut Player,
             &mut Velocity,
             &Friction,
-            &mut Transform,
+            &mut KinematicCharacterController,
             &KinematicCharacterControllerOutput,
         ),
         With<Player>,
@@ -66,14 +72,23 @@ fn player_movement(
     input: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
-    for (mut player, mut vel, friction, mut transform, controller_output) in query.iter_mut() {
+    for (mut player, mut vel, friction, mut controller, controller_output) in query.iter_mut() {
         let left_input = input.any_pressed([KeyCode::A, KeyCode::Left]);
         let right_input = input.any_pressed([KeyCode::D, KeyCode::Right]);
 
         info!(player.jumps_left);
+        info!(controller_output.grounded);
 
         if controller_output.grounded {
             player.jumps_left = player.jumps;
+            vel.linvel.y = 1.0; // gravity has no effect on player when on ground
+        } else {
+            // apply gravity
+            if vel.linvel.y >= -MAX_GRAVITY_SPEED + GRAVITY_ACCELERATION * time.delta_seconds() {
+                vel.linvel.y -= GRAVITY_ACCELERATION * time.delta_seconds();
+            } else {
+                vel.linvel.y = -MAX_GRAVITY_SPEED;
+            }
         }
 
         if player.jumps_left > 0 {
@@ -85,7 +100,7 @@ fn player_movement(
 
         let x_axis = -(left_input as i8) + right_input as i8;
 
-        // move player
+        // player input movement
         if x_axis != 0 {
             if vel.linvel.x + ACCELERATION * time.delta_seconds() < MAX_SPEED && x_axis > 0 {
                 vel.linvel.x += ACCELERATION * time.delta_seconds();
@@ -104,5 +119,8 @@ fn player_movement(
                 vel.linvel.x = 0.0;
             }
         }
+
+        controller.translation =
+            Some(vel.linvel * Vec2::new(time.delta_seconds(), time.delta_seconds()));
     }
 }

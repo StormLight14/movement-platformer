@@ -4,7 +4,8 @@ use bevy_rapier2d::prelude::*;
 
 pub const VIEW_WIDTH: f32 = 640.0;
 pub const VIEW_HEIGHT: f32 = 360.0;
-pub const GRAVITY_SPEED: f32 = 400.0;
+pub const MAX_GRAVITY_SPEED: f32 = 400.0;
+pub const GRAVITY_ACCELERATION: f32 = 200.0;
 
 use camera::CameraPlugin;
 use player::PlayerPlugin;
@@ -36,7 +37,7 @@ fn main() {
 }
 
 fn setup_physics(mut commands: Commands, mut rapier_config: ResMut<RapierConfiguration>) {
-    rapier_config.gravity = Vec2::new(0.0, -GRAVITY_SPEED);
+    rapier_config.gravity = Vec2::new(0.0, -MAX_GRAVITY_SPEED);
     commands
         .spawn(Collider::cuboid(VIEW_WIDTH, 50.0))
         .insert(TransformBundle::from(Transform::from_xyz(0.0, 0.0, 0.0)));
