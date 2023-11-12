@@ -1,17 +1,21 @@
 use bevy::{input::common_conditions::input_toggle_active, prelude::*};
+use bevy_ecs_ldtk::prelude::*;
 use bevy_parallax::ParallaxPlugin;
 use bevy_rapier2d::prelude::*;
 
 pub const VIEW_WIDTH: f32 = 640.0;
 pub const VIEW_HEIGHT: f32 = 360.0;
 pub const MAX_GRAVITY_SPEED: f32 = 400.0;
-pub const GRAVITY_ACCELERATION: f32 = 200.0;
+pub const GRAVITY_ACCELERATION: f32 = 250.0;
+pub const TILE_SIZE: f32 = 16.0;
 
 use camera::CameraPlugin;
 use player::PlayerPlugin;
+use tiles::TilesPlugin;
 
 mod camera;
 mod player;
+mod tiles;
 
 fn main() {
     App::new()
@@ -20,7 +24,7 @@ fn main() {
                 .set(ImagePlugin::default_nearest())
                 .set(WindowPlugin {
                     primary_window: Some(Window {
-                        title: "Kirby Platformer".into(),
+                        title: "Movement Platformer".into(),
                         resolution: (1280.0, 720.0).into(),
                         resizable: false,
                         ..default()
@@ -29,9 +33,11 @@ fn main() {
                 })
                 .build(),
         )
+        .add_plugins(LdtkPlugin)
+        .insert_resource(LevelSelection::Index(0))
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugins(RapierDebugRenderPlugin::default())
-        .add_plugins((CameraPlugin, PlayerPlugin))
+        .add_plugins((TilesPlugin, CameraPlugin, PlayerPlugin))
         .add_systems(Startup, setup_physics)
         .run();
 }

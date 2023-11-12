@@ -76,12 +76,12 @@ fn player_movement(
         let left_input = input.any_pressed([KeyCode::A, KeyCode::Left]);
         let right_input = input.any_pressed([KeyCode::D, KeyCode::Right]);
 
-        info!(player.jumps_left);
-        info!(controller_output.grounded);
+        //info!(player.jumps_left);
+        //info!(controller_output.grounded);
 
         if controller_output.grounded {
             player.jumps_left = player.jumps;
-            vel.linvel.y = 1.0; // gravity has no effect on player when on ground
+            vel.linvel.y = 3.0; // gravity has no effect on player when on ground
         } else {
             // apply gravity
             if vel.linvel.y >= -MAX_GRAVITY_SPEED + GRAVITY_ACCELERATION * time.delta_seconds() {

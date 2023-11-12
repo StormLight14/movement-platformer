@@ -77,7 +77,7 @@ fn spawn_camera(mut commands: Commands, mut create_parallax: EventWriter<CreateP
             */
             // Mountains
             LayerData {
-                speed: LayerSpeed::Bidirectional(0.6, 0.8),
+                speed: LayerSpeed::Bidirectional(1.5, 1.1),
                 repeat: LayerRepeat::horizontally(RepeatStrategy::Same),
                 path: "bg/mountains1.png".to_string(),
                 tile_size: Vec2::new(2000.0, 1000.0),
@@ -121,6 +121,7 @@ pub fn move_background(
     mut move_event_writer: EventWriter<ParallaxMoveEvent>,
     mut camera_query: Query<(Entity, &mut Transform), With<Camera>>,
     player_query: Query<&Velocity, (With<Player>, Without<Camera>)>,
+    time: Res<Time>,
 ) {
     let (camera, mut camera_transform) = camera_query.get_single_mut().unwrap();
     let player_velocity = player_query.single();
@@ -146,7 +147,7 @@ pub fn move_background(
     }
 
     move_event_writer.send(ParallaxMoveEvent {
-        camera_move_speed: Vec2::new(player_velocity.linvel.x * 0.001, 0.0),
+        camera_move_speed: Vec2::new(player_velocity.linvel.x * time.delta_seconds(), 0.0),
         camera,
     });
 }
