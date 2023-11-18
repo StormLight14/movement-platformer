@@ -4,9 +4,9 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{GRAVITY_ACCELERATION, MAX_GRAVITY_SPEED};
 
-pub const ACCELERATION: f32 = 250.0;
-pub const MAX_SPEED: f32 = 100.0;
-const JUMP_STRENGTH: f32 = 100.0;
+pub const ACCELERATION: f32 = 350.0;
+pub const MAX_SPEED: f32 = 150.0;
+const JUMP_STRENGTH: f32 = 200.0;
 
 pub struct PlayerPlugin;
 
@@ -46,7 +46,7 @@ fn spawn_player(mut commands: Commands, asset_server: Res<AssetServer>) {
         },
         Name::from("Player"),
         Velocity::zero(),
-        RigidBody::KinematicVelocityBased,
+        RigidBody::KinematicPositionBased,
         LockedAxes::ROTATION_LOCKED,
         KinematicCharacterController {
             up: Vec2::new(0.0, 1.0),

@@ -77,7 +77,7 @@ fn spawn_camera(mut commands: Commands, mut create_parallax: EventWriter<CreateP
             */
             // Mountains
             LayerData {
-                speed: LayerSpeed::Bidirectional(1.5, 1.1),
+                speed: LayerSpeed::Bidirectional(0.9, 0.9),
                 repeat: LayerRepeat::horizontally(RepeatStrategy::Same),
                 path: "bg/mountains1.png".to_string(),
                 tile_size: Vec2::new(2000.0, 1000.0),
@@ -89,7 +89,7 @@ fn spawn_camera(mut commands: Commands, mut create_parallax: EventWriter<CreateP
             },
             LayerData {
                 position: Vec2::new(0.0, 200.0),
-                speed: LayerSpeed::Bidirectional(0.3, 0.45),
+                speed: LayerSpeed::Bidirectional(0.2, 0.2),
                 repeat: LayerRepeat::horizontally(RepeatStrategy::Same),
                 path: "bg/clouds1.png".to_string(),
                 tile_size: Vec2::new(1500.0, 50.0),
