@@ -6,7 +6,7 @@ use bevy_rapier2d::prelude::*;
 pub const VIEW_WIDTH: f32 = 640.0;
 pub const VIEW_HEIGHT: f32 = 360.0;
 pub const MAX_GRAVITY_SPEED: f32 = 400.0;
-pub const GRAVITY_ACCELERATION: f32 = 350.0;
+pub const GRAVITY_ACCELERATION: f32 = 400.0;
 pub const TILE_SIZE: f32 = 16.0;
 
 use camera::CameraPlugin;
