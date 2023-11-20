@@ -10,14 +10,6 @@ impl Plugin for TilesPlugin {
     fn build(&self, app: &mut App) {
         app.register_ldtk_int_cell::<PlatformBundle>(0)
             .register_ldtk_int_cell::<PlatformBundle>(1)
-            .register_ldtk_int_cell::<PlatformBundle>(2)
-            .register_ldtk_int_cell::<PlatformBundle>(3)
-            .register_ldtk_int_cell::<PlatformBundle>(4) // higher ground
-            .register_ldtk_int_cell::<PlatformBundle>(5) // fences
-            .register_ldtk_int_cell::<PlatformBundle>(6) // thick trees
-            .register_ldtk_int_cell::<PlatformBundle>(8) // rocks
-            .register_ldtk_int_cell::<PlatformBundle>(9) // invisible walls
-            .register_ldtk_int_cell::<PlatformBundle>(10) // interior walls
             .add_systems(Startup, setup_ldtk)
             .add_systems(Update, spawn_platform_collision);
     }
